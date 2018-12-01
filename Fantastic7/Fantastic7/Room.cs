@@ -60,7 +60,7 @@ namespace Fantastic7
         {
             for (int i = 0; i < EventHandler.rand.Next(lower, upper); i++)
             {
-                Ranger r = new Ranger(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))), -1, 0, 80, GObject.CollisionNature.KnockBack, new Gun(20, 20, 600));
+                Ranger r = new Ranger(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))), 80, 3, 80, GObject.CollisionNature.KnockBack, new Gun(7, 20, 600));
                 _go.Add(r);
             }
         }
@@ -69,7 +69,7 @@ namespace Fantastic7
         {
             for(int i = 0; i < EventHandler.rand.Next(lower, upper); i++)
             {
-                Charger c = new Charger(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))), -1, 0, 130, GObject.CollisionNature.KnockBack);
+                Charger c = new Charger(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))), 120, 6, 130, GObject.CollisionNature.KnockBack);
                 _go.Add(c);
             }
         }
