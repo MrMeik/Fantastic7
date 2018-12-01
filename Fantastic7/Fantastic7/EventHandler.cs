@@ -21,16 +21,6 @@ namespace Fantastic7
 
         }
 
-        public bool getShopState()
-        {
-            if (CollisionHandler.shop)
-            {
-                CollisionHandler.shop = !CollisionHandler.shop;
-                return true;
-            }
-            else return false;
-        }
-
         public void handle(GameTime gt)
         {
             CollisionHandler.handle();
@@ -39,7 +29,6 @@ namespace Fantastic7
     }
     class CollisionHandler
     {
-        public bool shop;
         private Game _game;
         private Map _currmap;
         private Room _currRoom;
@@ -53,7 +42,6 @@ namespace Fantastic7
         };
         public CollisionHandler(Map currmap)
         {
-            shop = false;
             _currmap = currmap;
             _player = _currmap.player;
         }
@@ -191,8 +179,7 @@ namespace Fantastic7
                     {
                         if (_go[i] is Shop || _go[j] is Shop )
                         {
-                            shop = true;
-                            Console.Out.WriteLine("Shops");
+                            Game1.gs = GameState.shop;
                         }
                         if (_go[i] is Bullet)
                         {                            
@@ -373,7 +360,7 @@ namespace Fantastic7
                         _go.Remove(_go[i]);
                         if (en == _player)
                         {
-                            Game1.gs = Game1.GameState.mainMenu;
+                            Game1.gs = GameState.mainMenu;
                         }
                     }
                 }
