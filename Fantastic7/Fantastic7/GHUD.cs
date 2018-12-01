@@ -14,9 +14,9 @@ namespace Fantastic7
     /// </summary>
     class GHUD
     {
-        private int _currentHP;
+        private float _currentHP;
         private int _currency;
-        public int CurrentHP {
+        public float CurrentHP {
             get
             {
                 return _currentHP;
@@ -40,7 +40,7 @@ namespace Fantastic7
                     _currency = 0;
             }
         }
-        public int MaxHP { get; set; }
+        public float MaxHP { get; set; }
         public int Score { get; set; }
         public int Level { get; set; }
 
@@ -51,7 +51,6 @@ namespace Fantastic7
         private int _fwidth;
         private int xOffset = 10;
         private int yOffset = 10;
-        private double elapsedTime = 0;
         private Entity player;
         private int hpBarLength = 100;
 
@@ -66,20 +65,15 @@ namespace Fantastic7
             _fheight = (int)font.MeasureString("H").Y;
             _fwidth = (int)font.MeasureString("Health: ").X;
             _hudBG = new NSprite(new Rectangle(0, 0, _fwidth + hpBarLength + xOffset * 2, 120), new Color(Color.Black, 0.5f));
-            _healthBorder = new NSprite(new Rectangle((int)_hudBG.getPosition().X + 78, (int)_hudBG.getPosition().Y + 14, MaxHP + 4, 15), new Color(Color.Gray, 0.8f));
+            _healthBorder = new NSprite(new Rectangle((int)_hudBG.getPosition().X + 78, (int)_hudBG.getPosition().Y + 14, hpBarLength + 4, 15), new Color(Color.Gray, 0.8f));
     }
 
         public void update(GameTime gt)
         {
-            // Testing value changes in HUD
-            elapsedTime += gt.ElapsedGameTime.Milliseconds;
-            if(elapsedTime > 1000)
-            {
-                elapsedTime = 0;
-                Score++;
-            }
-            CurrentHP = player._curHealth;
-            MaxHP = player._maxHealth;
+            if (CurrentHP != player._curHealth)
+                CurrentHP = player._curHealth;
+            if (MaxHP != player._maxHealth)
+                MaxHP = player._maxHealth;
         }
 
         public void draw(SpriteBatchPlus sb, float scale)

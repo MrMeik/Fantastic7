@@ -362,6 +362,14 @@ namespace Fantastic7
                         {
                             Game1.gs = GameState.mainMenu;
                         }
+                        if (en is Charger)
+                        {
+                            _currmap.hud.Score += 5;
+                        }
+                        if (en is Ranger)
+                        {
+                            _currmap.hud.Score += 10;
+                        }
                     }
                 }
             }
