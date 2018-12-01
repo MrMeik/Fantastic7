@@ -30,9 +30,14 @@ namespace Fantastic7
         //Creates a random room
         public Room()
         {
+            Color randomColor;
             _gs = new List<GSprite>();
-            _gs.Add(new NSprite(new Rectangle(0, 0, 1280, 720), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))));
-            _gs.Add(new NSprite(new Rectangle(100, 100, 1280 - 200, 720 - 200), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))));
+            randomColor = Color.Lerp(Color.White, new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255)), 0.3f);
+            _gs.Add(new TSprite(SpriteLoader.images["wall01"], new Rectangle(0, 0, 1280, 720), randomColor));
+            randomColor = Color.Lerp(Color.White, new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255)), 0.3f);
+            _gs.Add(new TSprite(SpriteLoader.images["floor"], new Rectangle(100, 100, 1280 - 200, 720 - 200), randomColor));
+            //_gs.Add(new NSprite(new Rectangle(0, 0, 1280, 720), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))));
+            //_gs.Add(new NSprite(new Rectangle(100, 100, 1280 - 200, 720 - 200), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))));
 
             unlockAll();
 
