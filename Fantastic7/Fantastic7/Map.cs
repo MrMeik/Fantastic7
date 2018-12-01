@@ -51,7 +51,7 @@ namespace Fantastic7
                 //Generates first room in a random place on map
                 x = r.Next(0, size);
                 y = r.Next(0, size);
-                _rooms[x + size * y] = new Room();
+                _rooms[x + size * y] = new ShopRoom();
                 _currRoom = _rooms[x + size * y];
 
                 //Creates stack used for recursize alg
@@ -151,8 +151,8 @@ namespace Fantastic7
                     if (!muteConsole) Console.Out.WriteLine("Direction Pop");
                     a.Remove(a.ElementAt(r.Next(a.Count())));
                 }
-                
-                if(a.Count > 0)
+
+                if (a.Count > 0)
                 {
                     sel = r.Next(a.Count); //Picks a random direction that is still unattempted
                     switch (a.ElementAt(sel))
@@ -160,7 +160,7 @@ namespace Fantastic7
                         case 0:
                             if (_rooms[x + 1 + size * y] == null)//Checks if the direction does not have a room and creates one
                             {
-                                _rooms[x + 1 + size * y] = new Room();
+                                _rooms[x + 1 + size * y] = newRoom();
                                 _rooms[x + 1 + size * y].left = _rooms[x + size * y];
                                 _rooms[x + size * y].right = _rooms[x + 1 + size * y];
                                 stack.Push(_rooms[x + 1 + size * y]);
@@ -180,7 +180,7 @@ namespace Fantastic7
                         case 1:
                             if (_rooms[x + size * (y - 1)] == null)
                             {
-                                _rooms[x + size * (y - 1)] = new Room();
+                                _rooms[x + size * (y - 1)] = newRoom();
                                 _rooms[x + size * (y - 1)].down = _rooms[x + size * y];
                                 _rooms[x + size * y].up = _rooms[x + size * (y - 1)];
                                 stack.Push(_rooms[x + size * (y - 1)]);
@@ -200,7 +200,7 @@ namespace Fantastic7
                         case 2:
                             if (_rooms[x - 1 + size * y] == null)
                             {
-                                _rooms[x - 1 + size * y] = new Room();
+                                _rooms[x - 1 + size * y] = newRoom();
                                 _rooms[x - 1 + size * y].right = _rooms[x + size * y];
                                 _rooms[x + size * y].left = _rooms[x - 1 + size * y];
                                 stack.Push(_rooms[x - 1 + size * y]);
@@ -220,7 +220,7 @@ namespace Fantastic7
                         case 3:
                             if (_rooms[x + size * (y + 1)] == null)
                             {
-                                _rooms[x + size * (y + 1)] = new Room();
+                                _rooms[x + size * (y + 1)] = newRoom();
                                 _rooms[x + size * (y + 1)].up = _rooms[x + size * y];
                                 _rooms[x + size * y].down = _rooms[x + size * (y + 1)];
                                 stack.Push(_rooms[x + size * (y + 1)]);
@@ -245,6 +245,13 @@ namespace Fantastic7
 
             stack.Pop(); //Base case occures when all four directions are tried
 
+        }
+
+        private Room newRoom()
+        {
+            int room = r.Next(10);
+            if (room < 7) return new MonsterRoom();
+            else return new TrapRoom();
         }
 
         public void update(GameTime gt)

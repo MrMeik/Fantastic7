@@ -46,8 +46,8 @@ namespace Fantastic7
 
     class NSprite : GSprite
     {
-        private Rectangle _r;
-        private Color _c;
+        protected Rectangle _r;
+        protected Color _c;
         //private Texture2D _t;
 
         override public void draw(SpriteBatchPlus sb, float scale) { sb.Draw(sb.defaultTexture(), _r, _c); }
@@ -65,5 +65,12 @@ namespace Fantastic7
         {
             return _r;
         }
+    }
+    
+    class TSprite : NSprite
+    {
+        protected Texture2D _t;
+        public TSprite(Texture2D t, Rectangle r, Color c) : base(new Rectangle(r.X, r.Y, t.Width, t.Height), c) { _t = t; }
+        override public void draw(SpriteBatchPlus sb, float scale) { sb.Draw(_t, _r, _c); }
     }
 }

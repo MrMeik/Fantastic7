@@ -133,10 +133,32 @@ namespace Fantastic7
             }
         }
 
+        public void increaseMax(int delta)
+        {
+            _maxHealth += delta;
+            _curHealth = _maxHealth;
+        }
+
         //Bounded health change, only positive numbers will used. Will heal entity by current amount
         public void getHealth(int regain)
         {
             if (regain > 0) modifyHealth(regain);
+        }
+    }
+
+    class Shop : GObject
+    {
+        public Shop(GSprite sprite, CollisionNature collisionNature = CollisionNature.Stable) : base(sprite, collisionNature)
+        {
+
+        }
+    }
+
+    class EndObject : GObject
+    {
+        public EndObject(GSprite sprite, CollisionNature collisionNature = CollisionNature.Stable) : base(sprite, collisionNature)
+        {
+
         }
     }
 }
