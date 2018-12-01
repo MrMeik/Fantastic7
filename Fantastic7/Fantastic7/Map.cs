@@ -35,7 +35,7 @@ namespace Fantastic7
         public Map(SpriteFont font)
         {
             _rooms = new Room[size * size];
-            player = new Entity(new NSprite(new Rectangle(500, 500, 50, 50), Color.Wheat), 100, 10, 400, GObject.CollisionNature.KnockBack, new Gun());
+            player = new Entity(new NSprite(new Rectangle(500, 500, 50, 50), Color.Wheat), 200, 35, 400, GObject.CollisionNature.KnockBack, new Gun());
             hud = new GHUD(player, font);
         }
 

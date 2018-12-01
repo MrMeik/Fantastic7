@@ -77,7 +77,6 @@ namespace Fantastic7
             {
                 elapsedTime = 0;
                 Score++;
-                player.modifyHealth(-2);
             }
             CurrentHP = player._curHealth;
             MaxHP = player._maxHealth;

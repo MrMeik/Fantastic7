@@ -90,11 +90,11 @@ namespace Fantastic7
     class Entity : GObject
     {
         public int _maxHealth { get; private set; }
-        public int _curHealth { get; private set; }
-        protected int _intDamage;
+        public int _curHealth { get; set; }
+        public int _intDamage { get; set; }
         protected bool damage;
         protected int _movementSpeed;
-        protected bool dead = false; //Used to mark it as ready for garbage collection
+        public bool dead = false; //Used to mark it as ready for garbage collection
         
         public Weapon _mainweapon;
 

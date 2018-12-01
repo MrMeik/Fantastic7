@@ -195,12 +195,24 @@ namespace Fantastic7
                             Console.Out.WriteLine("Shops");
                         }
                         if (_go[i] is Bullet)
-                        {
+                        {                            
+                            if (_go[j] is Entity)
+                            {
+                                Entity en = (Entity)_go[j];
+                                Bullet bu = (Bullet)_go[i];
+                                en.modifyHealth(-(int)bu._damage);
+                            }
                             _currRoom.getGObjects().Remove(_go[i]);
                             return;
                         }
                         if (_go[j] is Bullet)
                         {
+                            if(_go[i] is Entity)
+                            {
+                                Entity en = (Entity)_go[i];
+                                Bullet bu = (Bullet)_go[j];
+                                en.modifyHealth(-(int)bu._damage);
+                            }
                             _currRoom.getGObjects().Remove(_go[j]);
                             return;
                         }
@@ -319,6 +331,16 @@ namespace Fantastic7
                     y.move(new Vector2(-KnockBackDistance, -Skew + r.Next(-SkewBias, SkewBias)));
                     break;
             }
+            if (x==_player || y == _player)
+            {
+                if (x is Entity && y is Entity)
+                {
+                    Entity ex = (Entity)x;
+                    Entity ey = (Entity)y;
+                    ex.modifyHealth(-ey._intDamage);
+                    ey.modifyHealth(-ex._intDamage);
+                }
+            }
         }
     }
     class EntityBehaviorHandler
@@ -334,8 +356,28 @@ namespace Fantastic7
         public void handle(GameTime gt)
         {
             _currRoom = _currmap._currRoom;
+            DeathRecycleHandle(gt);
             EntityMoveHandle(gt);
             WeaponUseHandle(gt);
+        }
+        public void DeathRecycleHandle(GameTime gt)
+        {
+            List<GObject> _go = _currRoom.getGObjects();
+            for (int i = 0; i < _go.Count - 1; i++)
+            {
+                if(_go[i] is Entity)
+                {
+                    Entity en = (Entity)_go[i];
+                    if (en.dead)
+                    {
+                        _go.Remove(_go[i]);
+                        if (en == _player)
+                        {
+                            Game1.gs = Game1.GameState.mainMenu;
+                        }
+                    }
+                }
+            }
         }
         public void EntityMoveHandle(GameTime gt)
         {
@@ -414,7 +456,7 @@ namespace Fantastic7
                         break;
 
                 }
-                Bullet b = new Bullet(new NSprite(new Rectangle(LaunchX, LaunchY, gun._BulletSize, gun._BulletSize), Color.Black), GObject.CollisionNature.Free, gun._BulletSpeed);
+                Bullet b = new Bullet(new NSprite(new Rectangle(LaunchX, LaunchY, gun._BulletSize, gun._BulletSize), Color.Black), GObject.CollisionNature.Free, gun._BulletSpeed,gun._Damage);
                 b.direction = en.direction;
                 _currRoom.addObject(b);
                 gun._ReloadTimer++;

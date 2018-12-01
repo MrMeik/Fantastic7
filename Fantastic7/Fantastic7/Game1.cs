@@ -30,7 +30,7 @@ namespace Fantastic7
     {
         GraphicsDeviceManager graphics;
         SpriteBatchPlus spriteBatch;
-        public GameState gs;
+        public static GameState gs;
         Room rm;
         //Texture2D plainText;
         Map currMap;
@@ -48,7 +48,7 @@ namespace Fantastic7
         PlayControls PlayControls;
         EventHandler EventHandler;
 
-        
+
 
         public Game1()
         {
