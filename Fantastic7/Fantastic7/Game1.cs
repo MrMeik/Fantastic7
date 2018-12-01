@@ -7,6 +7,14 @@ using System.Timers;
 
 namespace Fantastic7
 {
+    public enum GameState
+    {
+        mainMenu,
+        running,
+        paused,
+        shop
+    };
+
     public class SpriteBatchPlus : SpriteBatch
     {
         private Texture2D _defaultTexture;
@@ -22,7 +30,7 @@ namespace Fantastic7
     {
         GraphicsDeviceManager graphics;
         SpriteBatchPlus spriteBatch;
-        GameState gs;
+        public GameState gs;
         Room rm;
         //Texture2D plainText;
         Map currMap;
@@ -33,18 +41,14 @@ namespace Fantastic7
         SpriteFont guiFont;
         GGUI mainMenu;
         GGUI pauseMenu;
+        GGUI shopMenu;
         int currentTime;
         int goalTime;
         MenuControls MenuControls;
         PlayControls PlayControls;
         EventHandler EventHandler;
 
-        enum GameState
-        {
-            mainMenu,
-            running,
-            paused
-        };
+        
 
         public Game1()
         {
@@ -132,6 +136,16 @@ namespace Fantastic7
 
             pauseMenu = new GGUI(pgs, pmo, Color.Azure);
 
+            //Creates Shop Menu
+            GSprite[] sgs = { new NSprite(new Rectangle(WIDTH / 4, HEIGHT / 8, WIDTH / 2, HEIGHT *2 / 3 ), Color.SandyBrown),
+                new NSprite(new Rectangle(WIDTH / 4, HEIGHT / 8, WIDTH / 2, mHeight * 2), Color.SaddleBrown),
+                new SSprite("Ye Old Shope", mfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 2, HEIGHT / 8 + mHeight / 2), Color.Azure)};
+
+            MenuOption[] smo = { new MenuOption(new SSprite("Weapon Damage", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight/2), Color.Azure)),
+                new MenuOption(new SSprite("Max Health", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 2), Color.Azure)),
+                new MenuOption(new SSprite("Quit", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 3.5f), Color.Azure))};
+
+            shopMenu = new GGUI(sgs, smo, Color.Azure);
 
             // TODO: use this.Content to load your game content here
         }
@@ -232,6 +246,7 @@ namespace Fantastic7
 
                     EventHandler.handle(gameTime);
                     currMap.update(gameTime);
+                    if (EventHandler.getShopState()) gs = GameState.shop;
                     
                     break;
                 case GameState.paused:
@@ -246,6 +261,33 @@ namespace Fantastic7
                     if (MenuControls.getSelect()) gs = GameState.mainMenu;
                     if (MenuControls.getExit()) gs = GameState.running;
                     //End inputs
+                    break;
+
+                case GameState.shop:
+                    MenuControls.update(gameTime);
+
+                    //Poll inputs
+
+                    if (MenuControls.getNextKey()) shopMenu.nextOption();
+                    if (MenuControls.getPrevKey()) shopMenu.previousOption();
+                    if (MenuControls.getSelect())
+                    {
+                        switch (shopMenu.getIndex())
+                        {
+                            case 0:
+                                currMap.player._mainweapon._Damage += 5;
+                                break;
+
+                            case 1:
+                                currMap.player.increaseMax(5);
+                                break;
+                        }
+                    }
+                    if (MenuControls.getExit()) gs = GameState.running;
+                    //End inputs
+
+                    currMap.hud.update(gameTime);
+
                     break;
                 default: break;
             }
@@ -273,7 +315,11 @@ namespace Fantastic7
                     pauseMenu.draw(spriteBatch, 1);
                     break;
                 case GameState.running:
-                    currMap.draw(spriteBatch, 1f);
+                    currMap.draw(spriteBatch, 1);
+                    break;
+                case GameState.shop:
+                    currMap.draw(spriteBatch, 1);
+                    shopMenu.draw(spriteBatch, 1);
                     break;
                 default: break;
             }

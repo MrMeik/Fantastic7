@@ -20,6 +20,17 @@ namespace Fantastic7
             EntityBehaviorHandler = new EntityBehaviorHandler(_currmap);
 
         }
+
+        public bool getShopState()
+        {
+            if (CollisionHandler.shop)
+            {
+                CollisionHandler.shop = !CollisionHandler.shop;
+                return true;
+            }
+            else return false;
+        }
+
         public void handle(GameTime gt)
         {
             CollisionHandler.handle();
@@ -28,6 +39,8 @@ namespace Fantastic7
     }
     class CollisionHandler
     {
+        public bool shop;
+        private Game _game;
         private Map _currmap;
         private Room _currRoom;
         private Entity _player;
@@ -40,13 +53,14 @@ namespace Fantastic7
         };
         public CollisionHandler(Map currmap)
         {
+            shop = false;
             _currmap = currmap;
             _player = _currmap.player;
         }
         public void handle()
         {
             _currRoom = _currmap._currRoom;
-            DoorCollisionHandle();
+            if(!_currRoom.doorLock) DoorCollisionHandle();
             ObjectCollisionHandle();
             FloorCollisionHandle();            
         }
@@ -175,6 +189,11 @@ namespace Fantastic7
                 {
                     if (_go[i].CollisionRect().Value.Intersects(_go[j].CollisionRect().Value))
                     {
+                        if (_go[i] is Shop || _go[j] is Shop )
+                        {
+                            shop = true;
+                            Console.Out.WriteLine("Shops");
+                        }
                         if (_go[i] is Bullet)
                         {
                             _currRoom.getGObjects().Remove(_go[i]);
