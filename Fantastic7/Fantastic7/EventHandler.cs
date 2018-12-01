@@ -373,7 +373,7 @@ namespace Fantastic7
                         _go.Remove(_go[i]);
                         if (en == _player)
                         {
-                            Game1.gs = Game1.GameState.mainMenu;
+                            Game1.gs = GameState.mainMenu;
                         }
                     }
                 }
