@@ -246,7 +246,6 @@ namespace Fantastic7
 
                     EventHandler.handle(gameTime);
                     currMap.update(gameTime);
-                    if (EventHandler.getShopState()) gs = GameState.shop;
                     
                     break;
                 case GameState.paused:
