@@ -35,9 +35,11 @@ namespace Fantastic7
     class Bullet : GObject
     {
         public float _BulletSpeed;
-        public Bullet(GSprite sprite, CollisionNature collisionNature = CollisionNature.Free,float BulletSpeed=1500) : base(sprite,CollisionNature.Free)
+        public float _damage;
+        public Bullet(GSprite sprite, CollisionNature collisionNature = CollisionNature.Free,float BulletSpeed=1500,float Damage=20) : base(sprite,CollisionNature.Free)
         {
             _BulletSpeed = BulletSpeed;
+            _damage = Damage;
         }
     }
 }

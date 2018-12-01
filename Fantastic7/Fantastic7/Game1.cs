@@ -22,7 +22,7 @@ namespace Fantastic7
     {
         GraphicsDeviceManager graphics;
         SpriteBatchPlus spriteBatch;
-        GameState gs;
+        public static GameState gs;
         Room rm;
         //Texture2D plainText;
         Map currMap;
@@ -39,7 +39,7 @@ namespace Fantastic7
         PlayControls PlayControls;
         EventHandler EventHandler;
 
-        enum GameState
+        public enum GameState
         {
             mainMenu,
             running,

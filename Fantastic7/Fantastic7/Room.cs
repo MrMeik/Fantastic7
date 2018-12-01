@@ -40,14 +40,14 @@ namespace Fantastic7
             {
                 _go.Add(new GObject(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 30, 30), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))),GObject.CollisionNature.Free));
             }
-            for (int i = 0; i < EventHandler.rand.Next(1, 3); i++)
+            for (int i = 0; i < EventHandler.rand.Next(1, 4); i++)
             {
-                Ranger r=new Ranger(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))), -1, 0, 80, GObject.CollisionNature.KnockBack, new Gun(20, 20, 600));
+                Ranger r=new Ranger(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))), 80, 2, 80, GObject.CollisionNature.KnockBack, new Gun(6, 20, 600));
                 _go.Add(r);
             }
-            for (int i = 0; i < EventHandler.rand.Next(1, 3); i++)
+            for (int i = 0; i < EventHandler.rand.Next(1, 4); i++)
             {
-                Charger c = new Charger(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))), -1, 0, 130, GObject.CollisionNature.KnockBack);
+                Charger c = new Charger(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))), 120, 8, 130, GObject.CollisionNature.KnockBack);
                 _go.Add(c);
             }
             floor = new Rectangle(100, 100, 1280 - 200, 720 - 200);
