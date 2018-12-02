@@ -35,6 +35,7 @@ namespace Fantastic7
         public SpriteFont getFont() { return _f; }
         override public Vector2 getPosition() { return _p; }
         public String getText() { return _t; }
+        public void setText(String text) { _t = text; }
 
         //Moves the sprite directly to the point V
         override public void jumpTo(Vector2 v)

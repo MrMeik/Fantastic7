@@ -14,7 +14,12 @@ namespace Fantastic7
 
         public MenuControls(Keys[] mainMenuControls) : base() {
 
+            int scrollspeed = 150;
             timerSet[Keys.Escape].goalTime = -1;
+            timerSet[Keys.S].goalTime = scrollspeed;
+            timerSet[Keys.Down].goalTime = scrollspeed;
+            timerSet[Keys.Up].goalTime = scrollspeed;
+            timerSet[Keys.W].goalTime = scrollspeed;
             //setTimer[Keys.Down].goalTime = (value) ;
         }
 
@@ -70,11 +75,5 @@ namespace Fantastic7
         {
             return getOneTime(Keys.Escape);
         }
-
-
-
-
-
-
     }
 }

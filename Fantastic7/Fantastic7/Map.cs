@@ -42,7 +42,7 @@ namespace Fantastic7
 
         public void GenerateMap()
         {
-
+            for (int i = 0; i < size * size; i++) _rooms[i] = null;
             r = new Random();
             int count;
             int x, y;
