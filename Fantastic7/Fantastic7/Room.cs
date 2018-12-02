@@ -30,13 +30,13 @@ namespace Fantastic7
 
         protected GObject[] _doors = {
             //new GObject(new NSprite(new Rectangle(1280 - 110, 720 / 2 - 50, 110, 100), Color.Yellow)),
-            new GObject(new TSprite(SpriteLoader.images["door_east"][(int)DoorState.locked], new Rectangle(1280 - SpriteLoader.images["door_east"][0].Width,720 / 2 - SpriteLoader.images["door_east"][0].Height/2,100,110), Color.White)),
+            new GObject(new TSprite(SpriteLoader.images["door_east"][(int)DoorState.open], new Rectangle(1280 - SpriteLoader.images["door_east"][0].Width,720 / 2 - SpriteLoader.images["door_east"][0].Height/2,100,110), Color.White)),
             //new GObject(new NSprite( new Rectangle(1280/2-50,0,100,110), Color.DarkGray)),
-        new GObject(new TSprite(SpriteLoader.images["door_north"][(int)DoorState.locked], new Rectangle(1280/2 - SpriteLoader.images["door_north"][0].Width/2,0,100,110), Color.White)),
+        new GObject(new TSprite(SpriteLoader.images["door_north"][(int)DoorState.open], new Rectangle(1280/2 - SpriteLoader.images["door_north"][0].Width/2,0,100,110), Color.White)),
             //new GObject(new NSprite( new Rectangle(0,720/2-50,110,100), Color.Pink)),
-            new GObject(new TSprite(SpriteLoader.images["door_west"][(int)DoorState.locked], new Rectangle(0, 720 / 2 - SpriteLoader.images["door_west"][0].Height/2,100,110), Color.White)),
+            new GObject(new TSprite(SpriteLoader.images["door_west"][(int)DoorState.open], new Rectangle(0, 720 / 2 - SpriteLoader.images["door_west"][0].Height/2,100,110), Color.White)),
         //new GObject(new NSprite( new Rectangle(1280/2-50,720-110,100,110), Color.Green))};
-            new GObject(new TSprite(SpriteLoader.images["door_south"][(int)DoorState.locked], new Rectangle(1280/2 - SpriteLoader.images["door_south"][0].Width/2,720 - SpriteLoader.images["door_south"][0].Height,100,110), Color.White))};
+            new GObject(new TSprite(SpriteLoader.images["door_south"][(int)DoorState.open], new Rectangle(1280/2 - SpriteLoader.images["door_south"][0].Width/2,720 - SpriteLoader.images["door_south"][0].Height,100,110), Color.White))};
 
         //Creates a random room
         public Room()
@@ -44,7 +44,7 @@ namespace Fantastic7
             Color randomColorTint;
             _gs = new List<GSprite>();
             randomColorTint = Color.Lerp(Color.White, new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255)), 0.3f);
-            _gs.Add(new TSprite(SpriteLoader.images["wall"][0], new Rectangle(0, 0, 1280, 720), randomColorTint));
+            _gs.Add(new TSprite(SpriteLoader.images["wall"][EventHandler.rand.Next(0,3)], new Rectangle(0, 0, 1280, 720), randomColorTint));
             randomColorTint = Color.Lerp(Color.White, new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255)), 0.3f);
             _gs.Add(new TSprite(SpriteLoader.images["floor"][0], new Rectangle(100, 100, 1280 - 200, 720 - 200), randomColorTint));
 
@@ -63,11 +63,19 @@ namespace Fantastic7
         public void lockAll()
         {
             doorLock = true;
+            ((TSprite)_doors[0].getSprite()).setTexture(SpriteLoader.images["door_east"][(int)DoorState.locked]);
+            ((TSprite)_doors[1].getSprite()).setTexture(SpriteLoader.images["door_north"][(int)DoorState.locked]);
+            ((TSprite)_doors[2].getSprite()).setTexture(SpriteLoader.images["door_west"][(int)DoorState.locked]);
+            ((TSprite)_doors[3].getSprite()).setTexture(SpriteLoader.images["door_south"][(int)DoorState.locked]);
         }
 
         public void unlockAll()
         {
             doorLock = false;
+            ((TSprite)_doors[0].getSprite()).setTexture(SpriteLoader.images["door_east"][(int)DoorState.open]);
+            ((TSprite)_doors[1].getSprite()).setTexture(SpriteLoader.images["door_north"][(int)DoorState.open]);
+            ((TSprite)_doors[2].getSprite()).setTexture(SpriteLoader.images["door_west"][(int)DoorState.open]);
+            ((TSprite)_doors[3].getSprite()).setTexture(SpriteLoader.images["door_south"][(int)DoorState.open]);
         }
 
         protected void addRanger(int lower, int upper)
@@ -96,7 +104,7 @@ namespace Fantastic7
         {
             for (int i = 0; i < EventHandler.rand.Next(lower, upper); i++)
             {
-                _go.Add(new GObject(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 70, 70), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255)))));
+                _go.Add(new GObject(new TSprite(SpriteLoader.images["grave"][0], new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 70, 70), Color.White)));
             }
         }
 
@@ -225,7 +233,7 @@ namespace Fantastic7
     {
         public ShopRoom() : base()
         {
-            addObject(new Shop(new NSprite(new Rectangle(1280 / 2 - 25, 720 / 2 - 25, 50, 50), Color.Brown)));
+            addObject(new Shop(new TSprite(SpriteLoader.images["shop"][0], new Rectangle(1280 / 2 - 25, 720 / 2 - 25, 50, 50), Color.White)));
         }
     }
 
@@ -234,7 +242,7 @@ namespace Fantastic7
         bool mapComplete;
         public EndRoom() : base()
         {
-            addObject(new EndObject(new NSprite(new Rectangle(1280 / 2 - 75, 720 / 2 - 75, 150, 150), Color.Red)));
+            addObject(new EndObject(new TSprite(SpriteLoader.images["exit"][0], new Rectangle(1280 / 2 - 75, 720 / 2 - 75, 150, 150), Color.White)));
             mapComplete = false;
         }
 

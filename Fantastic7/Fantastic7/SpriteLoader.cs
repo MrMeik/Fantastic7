@@ -36,11 +36,16 @@ namespace Fantastic7
             images.Add("door_south", door_south);
             images.Add("door_east", door_east);
             images.Add("door_west", door_west);
-            images.Add("wall", new Texture2D[] { Game.Content.Load<Texture2D>("sprites/wall_01") });
+            images.Add("wall", new Texture2D[] { Game.Content.Load<Texture2D>("sprites/wall_01"),
+                Game.Content.Load<Texture2D>("sprites/wall_02"),
+                Game.Content.Load<Texture2D>("sprites/wall_03")});
             images.Add("floor", new Texture2D[] { Game.Content.Load<Texture2D>("sprites/floor") });
             images.Add("player", new Texture2D[] { Game.Content.Load<Texture2D>("sprites/player") });
             images.Add("charger", new Texture2D[] { Game.Content.Load<Texture2D>("sprites/charger") });
             images.Add("ranger", new Texture2D[] { Game.Content.Load<Texture2D>("sprites/ranger") });
+            images.Add("exit", new Texture2D[] { Game.Content.Load<Texture2D>("sprites/stairs") });
+            images.Add("grave", new Texture2D[] { Game.Content.Load<Texture2D>("sprites/grave_john") });
+            images.Add("shop", new Texture2D[] { Game.Content.Load<Texture2D>("sprites/shop") });
 
             base.LoadContent();
         }
