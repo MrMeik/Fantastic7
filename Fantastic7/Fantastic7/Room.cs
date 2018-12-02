@@ -270,7 +270,6 @@ namespace Fantastic7
 
         public void checkLock()
         {
-            Console.Out.WriteLine(_go.Count + "  " + nonEnemyGO);
             if(_go.Count <= nonEnemyGO) { unlockAll(); }
         }
     }

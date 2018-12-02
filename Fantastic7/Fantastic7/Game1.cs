@@ -143,8 +143,8 @@ namespace Fantastic7
                 new NSprite(new Rectangle(WIDTH / 4, HEIGHT / 8, WIDTH / 2, mHeight * 2), Color.SaddleBrown),
                 new SSprite("Ye Old Shope", mfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 2, HEIGHT / 8 + mHeight / 2), Color.Azure)};
 
-            MenuOption[] smo = { new MenuOption(new SSprite("Weapon Damage", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight/2), Color.Azure)),
-                new MenuOption(new SSprite("Max Health", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 2), Color.Azure)),
+            MenuOption[] smo = { new MenuOption(new SSprite("Weapon Damage (10C)", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight/2), Color.Azure)),
+                new MenuOption(new SSprite("Max Health (10C)", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 2), Color.Azure)),
                 new MenuOption(new SSprite("Quit", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 3.5f), Color.Azure))};
 
             shopMenu = new GGUI(sgs, smo, Color.Azure);
@@ -276,11 +276,23 @@ namespace Fantastic7
                         switch (shopMenu.getIndex())
                         {
                             case 0:
-                                currMap.player._mainweapon._Damage += 5;
+                                if (currMap.hud.Currency >= 10)
+                                {
+                                    currMap.player._mainweapon._Damage += 5;
+                                    currMap.hud.Currency -= 10;
+                                }
                                 break;
 
                             case 1:
-                                currMap.player.increaseMax(5);
+                                if (currMap.hud.Currency >= 10)
+                                {
+                                    currMap.player.increaseMax(5);
+                                    currMap.hud.Currency -= 10;
+                                }
+                                break;
+
+                            case 2:
+                                gs = GameState.running;
                                 break;
                         }
                     }
