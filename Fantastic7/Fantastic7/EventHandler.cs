@@ -153,17 +153,34 @@ namespace Fantastic7
                         // move player to new room
                         //_player = (Entity)g;
                         _currRoom.addObject(_player);
-                        // Based on door entered, reposition player location
+                        int doorWidth;
+                        int doorHeight;
+                        int newPosX;
+                        int newPosY;
+
                         if (direction.Equals(Direction.North))
-                            _player.jumpTo(new Vector2(1280 / 2, 720 - 180));
+                        {
+                            newPosY = _currRoom.getDoors()[3].CollisionRect().Value.Y;
+                            _player.jumpTo(new Vector2(_player.CollisionRect().Value.X, newPosY - _player.CollisionRect().Value.Height - 10));
+                        }
                         else if (direction.Equals(Direction.East))
-                            _player.jumpTo(new Vector2(130, 720 / 2));
+                        {
+                            doorWidth = _currRoom.getDoors()[2].CollisionRect().Value.Width;
+                            newPosX = _currRoom.getDoors()[2].CollisionRect().Value.X;
+                            _player.jumpTo(new Vector2(newPosX + doorWidth + 10, _player.CollisionRect().Value.Y));
+                        }
                         else if (direction.Equals(Direction.South))
-                            _player.jumpTo(new Vector2(1280 / 2, 130));
+                        {
+                            doorHeight = _currRoom.getDoors()[1].CollisionRect().Value.Height;
+                            newPosY = _currRoom.getDoors()[1].CollisionRect().Value.Y;
+                            _player.jumpTo(new Vector2(_player.CollisionRect().Value.X, newPosY + doorHeight + 10));
+                        }
                         else if (direction.Equals(Direction.West))
-                            _player.jumpTo(new Vector2(1280 - 180, 720 / 2));
+                        {
+                            doorX = _currRoom.getDoors()[0].CollisionRect().Value.X;
+                            _player.jumpTo(new Vector2(doorX - _player.CollisionRect().Value.Width - 10, _player.CollisionRect().Value.Y));
+                        }
                     }
-                    //Console.Out.WriteLine("Player touched door at X:" + door.CollisionRect().Value.X + " Y: " + door.CollisionRect().Value.Y);
                 }
             }
         }

@@ -19,20 +19,34 @@ namespace Fantastic7
         protected List<GObject> _go;
         protected List<GSprite> _gs;
         public Rectangle floor;
+      
+        private bool doorLock;
 
-        private bool doorLock; 
+        enum DoorState
+        {
+            open = 0,
+            locked = 1
+        }
 
-        protected GObject[] _doors = { new GObject(new NSprite(new Rectangle(1280 - 110, 720 / 2 - 50, 110, 100), Color.DarkGray)),
-            new GObject(new NSprite( new Rectangle(1280/2-50,0,100,110), Color.DarkGray)),
-            new GObject(new NSprite( new Rectangle(0,720/2-50,110,100), Color.DarkGray)),
-            new GObject(new NSprite( new Rectangle(1280/2-50,720-110,100,110), Color.DarkGray))};
+        protected GObject[] _doors = {
+            //new GObject(new NSprite(new Rectangle(1280 - 110, 720 / 2 - 50, 110, 100), Color.Yellow)),
+            new GObject(new TSprite(SpriteLoader.images["door_east"][(int)DoorState.locked], new Rectangle(1280 - SpriteLoader.images["door_east"][0].Width,720 / 2 - SpriteLoader.images["door_east"][0].Height/2,100,110), Color.White)),
+            //new GObject(new NSprite( new Rectangle(1280/2-50,0,100,110), Color.DarkGray)),
+        new GObject(new TSprite(SpriteLoader.images["door_north"][(int)DoorState.locked], new Rectangle(1280/2 - SpriteLoader.images["door_north"][0].Width/2,0,100,110), Color.White)),
+            //new GObject(new NSprite( new Rectangle(0,720/2-50,110,100), Color.Pink)),
+            new GObject(new TSprite(SpriteLoader.images["door_west"][(int)DoorState.locked], new Rectangle(0, 720 / 2 - SpriteLoader.images["door_west"][0].Height/2,100,110), Color.White)),
+        //new GObject(new NSprite( new Rectangle(1280/2-50,720-110,100,110), Color.Green))};
+            new GObject(new TSprite(SpriteLoader.images["door_south"][(int)DoorState.locked], new Rectangle(1280/2 - SpriteLoader.images["door_south"][0].Width/2,720 - SpriteLoader.images["door_south"][0].Height,100,110), Color.White))};
 
         //Creates a random room
         public Room()
         {
+            Color randomColorTint;
             _gs = new List<GSprite>();
-            _gs.Add(new NSprite(new Rectangle(0, 0, 1280, 720), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))));
-            _gs.Add(new NSprite(new Rectangle(100, 100, 1280 - 200, 720 - 200), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))));
+            randomColorTint = Color.Lerp(Color.White, new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255)), 0.3f);
+            _gs.Add(new TSprite(SpriteLoader.images["wall"][0], new Rectangle(0, 0, 1280, 720), randomColorTint));
+            randomColorTint = Color.Lerp(Color.White, new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255)), 0.3f);
+            _gs.Add(new TSprite(SpriteLoader.images["floor"][0], new Rectangle(100, 100, 1280 - 200, 720 - 200), randomColorTint));
 
             unlockAll();
 
@@ -60,7 +74,9 @@ namespace Fantastic7
         {
             for (int i = 0; i < EventHandler.rand.Next(lower, upper); i++)
             {
-                Ranger r = new Ranger(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))), 80, 3, 80, GObject.CollisionNature.KnockBack, new Gun(7, 20, 600));
+                Color randomColorTint = Color.Lerp(Color.White, new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255)), 0.3f);
+                //Ranger r = new Ranger(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))), 80, 3, 80, GObject.CollisionNature.KnockBack, new Gun(7, 20, 600));
+                Ranger r = new Ranger(new TSprite(SpriteLoader.images["ranger"][0], new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), randomColorTint), 80, 3, 80, GObject.CollisionNature.KnockBack, new Gun(7, 20, 600));
                 _go.Add(r);
             }
         }
@@ -69,7 +85,9 @@ namespace Fantastic7
         {
             for(int i = 0; i < EventHandler.rand.Next(lower, upper); i++)
             {
-                Charger c = new Charger(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))), 120, 6, 130, GObject.CollisionNature.KnockBack);
+                Color randomColorTint = Color.Lerp(Color.White, new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255)), 0.3f);
+                //Charger c = new Charger(new NSprite(new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), new Color(EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255), EventHandler.rand.Next(0, 255))), 120, 6, 130, GObject.CollisionNature.KnockBack);
+                Charger c = new Charger(new TSprite(SpriteLoader.images["charger"][0], new Rectangle(EventHandler.rand.Next(100, 1280 - 230), EventHandler.rand.Next(100, 720 - 230), 50, 50), randomColorTint), 120, 6, 130, GObject.CollisionNature.KnockBack);
                 _go.Add(c);
             }
         }

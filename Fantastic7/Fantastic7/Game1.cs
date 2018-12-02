@@ -47,7 +47,7 @@ namespace Fantastic7
         MenuControls MenuControls;
         PlayControls PlayControls;
         EventHandler EventHandler;
-
+        SpriteLoader spriteLoader;
 
 
         public Game1()
@@ -70,6 +70,8 @@ namespace Fantastic7
         {
             // TODO: Add your initialization logic here
             gs = GameState.mainMenu;
+            spriteLoader = new SpriteLoader(this);
+            Components.Add(spriteLoader);
             base.Initialize();
         }
 
