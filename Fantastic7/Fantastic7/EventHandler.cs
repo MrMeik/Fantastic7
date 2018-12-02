@@ -48,7 +48,7 @@ namespace Fantastic7
         public void handle()
         {
             _currRoom = _currmap._currRoom;
-            if(!_currRoom.doorLock) DoorCollisionHandle();
+            if(!_currRoom.getLockStatus()) DoorCollisionHandle();
             ObjectCollisionHandle();
             FloorCollisionHandle();            
         }
@@ -382,10 +382,13 @@ namespace Fantastic7
                         if (en is Charger)
                         {
                             _currmap.hud.Score += 5;
+                            _currmap.hud.Currency += 1;
+
                         }
                         if (en is Ranger)
                         {
                             _currmap.hud.Score += 10;
+                            _currmap.hud.Currency += 2;
                         }
                     }
                 }

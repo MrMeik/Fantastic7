@@ -19,8 +19,8 @@ namespace Fantastic7
         protected List<GObject> _go;
         protected List<GSprite> _gs;
         public Rectangle floor;
-
-        public bool doorLock;
+      
+        private bool doorLock;
 
         enum DoorState
         {
@@ -55,7 +55,7 @@ namespace Fantastic7
             floor = new Rectangle(100, 100, 1280 - 200, 720 - 200);
         }
 
-        public bool getLockStatus(GObject door)
+        public bool getLockStatus()
         {
             return doorLock;
         }
@@ -268,9 +268,10 @@ namespace Fantastic7
             }
         }
 
-        public new void update(GameTime gt)
+        public void checkLock()
         {
-            if(_go.Count < nonEnemyGO) { unlockAll(); }
+            Console.Out.WriteLine(_go.Count + "  " + nonEnemyGO);
+            if(_go.Count <= nonEnemyGO) { unlockAll(); }
         }
     }
 }
