@@ -20,7 +20,7 @@ namespace Fantastic7
         protected List<GSprite> _gs;
         public Rectangle floor;
 
-        public bool doorLock; 
+        private bool doorLock; 
 
         protected GObject[] _doors = { new GObject(new NSprite(new Rectangle(1280 - 110, 720 / 2 - 50, 110, 100), Color.DarkGray)),
             new GObject(new NSprite( new Rectangle(1280/2-50,0,100,110), Color.DarkGray)),
@@ -41,7 +41,7 @@ namespace Fantastic7
             floor = new Rectangle(100, 100, 1280 - 200, 720 - 200);
         }
 
-        public bool getLockStatus(GObject door)
+        public bool getLockStatus()
         {
             return doorLock;
         }
@@ -250,9 +250,10 @@ namespace Fantastic7
             }
         }
 
-        public new void update(GameTime gt)
+        public void checkLock()
         {
-            if(_go.Count < nonEnemyGO) { unlockAll(); }
+            Console.Out.WriteLine(_go.Count + "  " + nonEnemyGO);
+            if(_go.Count <= nonEnemyGO) { unlockAll(); }
         }
     }
 }

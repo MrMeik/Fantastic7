@@ -256,7 +256,8 @@ namespace Fantastic7
 
         public void update(GameTime gt)
         {
-            _currRoom.update(gt);
+            if(_currRoom is TrapRoom) ((TrapRoom)_currRoom).checkLock();
+            
             hud.update(gt);
         }
 
