@@ -383,7 +383,7 @@ namespace Fantastic7
                         _go.Remove(_go[i]);
                         if (en == _player)
                         {
-                            Game1.gs = GameState.mainMenu;
+                            Game1.gs = GameState.death;
                         }
                         if (en is Charger)
                         {

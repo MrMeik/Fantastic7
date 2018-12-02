@@ -53,7 +53,7 @@ namespace Fantastic7
         private int yOffset = 10;
         private Entity player;
         private int hpBarLength = 100;
-
+        
         public GHUD(Entity player, SpriteFont font)
         {
             this.player = player;
