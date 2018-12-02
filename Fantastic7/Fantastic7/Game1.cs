@@ -12,7 +12,8 @@ namespace Fantastic7
         mainMenu,
         running,
         paused,
-        shop
+        shop,
+        death
     };
 
     public class SpriteBatchPlus : SpriteBatch
@@ -39,11 +40,11 @@ namespace Fantastic7
         SpriteFont mfont;
         SpriteFont sfont;
         SpriteFont guiFont;
+        SSprite deathMenuScore;
         GGUI mainMenu;
         GGUI pauseMenu;
         GGUI shopMenu;
-        int currentTime;
-        int goalTime;
+        GGUI deathMenu;
         MenuControls MenuControls;
         PlayControls PlayControls;
         EventHandler EventHandler;
@@ -147,7 +148,22 @@ namespace Fantastic7
                 new MenuOption(new SSprite("Max Health (10C)", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 2), Color.Azure)),
                 new MenuOption(new SSprite("Quit", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 3.5f), Color.Azure))};
 
+
             shopMenu = new GGUI(sgs, smo, Color.Azure);
+
+            //Creates Death Menu
+
+            deathMenuScore = new SSprite("Your Score: ", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("You Died").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 3.5f), Color.Azure);
+
+            GSprite[] dgs = { new NSprite(new Rectangle(WIDTH / 4, HEIGHT / 8, WIDTH / 2, HEIGHT / 2), Color.SandyBrown),
+                new NSprite(new Rectangle(WIDTH / 4, HEIGHT / 8, WIDTH / 2, mHeight * 2), Color.SaddleBrown),
+                new SSprite("You Died", mfont, new Vector2(WIDTH / 2 - mfont.MeasureString("You Died").X / 2, HEIGHT / 8 + mHeight / 2), Color.Azure),
+                deathMenuScore};
+
+            MenuOption[] dmo = { new MenuOption(new SSprite("Main Menu", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("You Died").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight/2), Color.Azure)),
+                new MenuOption(new SSprite("Quit", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("You Died").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 2), Color.Azure))};
+
+            deathMenu = new GGUI(dgs, dmo, Color.Azure);
 
             // TODO: use this.Content to load your game content here
         }
@@ -302,6 +318,31 @@ namespace Fantastic7
                     currMap.hud.update(gameTime);
 
                     break;
+
+                case GameState.death:
+                    MenuControls.update(gameTime);
+
+                    deathMenuScore.setText("Your Score: " + currMap.hud.Score);
+
+                    //Poll inputs
+
+                    if (MenuControls.getNextKey()) deathMenu.nextOption();
+                    if (MenuControls.getPrevKey()) deathMenu.previousOption();
+                    if (MenuControls.getSelect())
+                    {
+                        switch (deathMenu.getIndex())
+                        {
+                            case 0:
+                                gs = GameState.mainMenu;
+                                break;
+
+                            case 1:
+                                Exit();
+                                break;
+                        }
+                    }
+                    if (MenuControls.getExit()) gs = GameState.mainMenu;
+                    break;
                 default: break;
             }
 
@@ -333,6 +374,10 @@ namespace Fantastic7
                 case GameState.shop:
                     currMap.draw(spriteBatch, 1);
                     shopMenu.draw(spriteBatch, 1);
+                    break;
+                case GameState.death:
+                    currMap.draw(spriteBatch, 1);
+                    deathMenu.draw(spriteBatch, 1);
                     break;
                 default: break;
             }

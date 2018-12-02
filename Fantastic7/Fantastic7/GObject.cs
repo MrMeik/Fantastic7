@@ -124,7 +124,7 @@ namespace Fantastic7
             if (damage)
             {
                 _curHealth += delta;
-                if (_curHealth < 0)
+                if (_curHealth <= 0)
                 {
                     _curHealth = 0;
                     dead = true;
