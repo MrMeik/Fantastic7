@@ -194,9 +194,15 @@ namespace Fantastic7
                 {
                     if (_go[i].CollisionRect().Value.Intersects(_go[j].CollisionRect().Value))
                     {
-                        if (_go[i] is Shop || _go[j] is Shop )
+                        if ((_go[i] is Shop || _go[j] is Shop) && (_go[i] == _player || _go[j] == _player))
                         {
                             Game1.gs = GameState.shop;
+                        }
+                        if ((_go[i] is EndObject || _go[j] is EndObject) && (_go[i] == _player || _go[j] == _player))
+                        {
+                            _currmap.hud.Score += 100;
+                            _currmap.hud.Level += 1;
+                            _currmap.GenerateMap();
                         }
                         if (_go[i] is Bullet)
                         {                            

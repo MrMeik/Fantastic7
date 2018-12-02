@@ -36,7 +36,7 @@ namespace Fantastic7
         {
             _rooms = new Room[size * size];
             //player = new Entity(new NSprite(new Rectangle(500, 500, 50, 50), Color.Wheat), 200, 35, 400, GObject.CollisionNature.KnockBack, new Gun());
-            player = new Entity(new TSprite(SpriteLoader.images["player"][0], new Rectangle(500, 500, 50, 50), Color.White), 200, 35, 400, GObject.CollisionNature.KnockBack, new Gun());
+            player = new Entity(new TSprite(SpriteLoader.images["player"][0], new Rectangle(300, 300, 50, 50), Color.White), 200, 35, 400, GObject.CollisionNature.KnockBack, new Gun());
             hud = new GHUD(player, font);
         }
 
@@ -71,9 +71,49 @@ namespace Fantastic7
 
             _currRoom.addObject(player);//Puts player in first room
 
-            //
-            //Used for constructing minimap, can be ignorned 
-            List < GSprite > gs = new List<GSprite>();
+            Room crawler = _currRoom;
+            do
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    List<Room> direction = new List<Room>();
+                    if (crawler.left != null) direction.Add(crawler.left);
+                    if (crawler.up != null) direction.Add(crawler.up);
+                    if (crawler.right != null) direction.Add(crawler.right);
+                    if (crawler.down != null) direction.Add(crawler.down);
+
+                    crawler = direction.ElementAt(r.Next(direction.Count));
+                }
+            } while (crawler == _currRoom);
+
+            Room temp = new EndRoom();
+            if (crawler.left != null)
+            {
+                crawler.left.right = temp;
+                temp.left = crawler.left;
+            }
+            if (crawler.up != null)
+            {
+                crawler.up.down = temp;
+                temp.up = crawler.up;
+            }
+            if (crawler.right != null)
+            {
+                crawler.right.left = temp;
+                temp.right = crawler.right;
+            }
+            if (crawler.down != null)
+            {
+                crawler.down.up = temp;
+                temp.down = crawler.down;
+            }
+
+            for(int i = 0; i < _rooms.Length; i++) if(_rooms[i] == crawler) _rooms[i] = temp;
+
+
+                //
+                //Used for constructing minimap, can be ignorned 
+                List < GSprite > gs = new List<GSprite>();
 
             gs.Add(new NSprite(new Rectangle(0, 0, 10 + 100 * size, 10 + 100 * size), Color.Black));
 
@@ -84,6 +124,7 @@ namespace Fantastic7
                     if (_rooms[i + size * j] != null)
                     {
                         if (i == x && j == y) gs.Add(new NSprite(new Rectangle(10 + (100) * i, 10 + 100 * j, 90, 90), Color.Red));
+                        else if (_rooms[i + size * j] is EndRoom) gs.Add(new NSprite(new Rectangle(10 + (100) * i, 10 + 100 * j, 90, 90), Color.Purple));
                         else gs.Add(new NSprite(new Rectangle(10 + (100) * i, 10 + 100 * j, 90, 90), Color.Azure));
                     }
                 }
