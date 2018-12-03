@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections;
 using System.Timers;
+using System.IO;
 
 namespace Fantastic7
 {
@@ -13,7 +14,8 @@ namespace Fantastic7
         running,
         paused,
         shop,
-        death
+        death,
+        leaderboard
     };
 
     public class SpriteBatchPlus : SpriteBatch
@@ -45,6 +47,12 @@ namespace Fantastic7
         GGUI pauseMenu;
         GGUI shopMenu;
         GGUI deathMenu;
+        GGUI scoreMenu;
+        SSprite[] highscoresSprites;
+        SSprite[] achievementSprites;
+        int[] loadedHighscores;
+        public static int[] loadedAchievements;
+        bool updateScoreMenu = false;
         MenuControls MenuControls;
         PlayControls PlayControls;
         EventHandler EventHandler;
@@ -115,18 +123,60 @@ namespace Fantastic7
             int sHeight = (int)sfont.MeasureString("M").Y;
 
 
+            //Score tracking system setup
+            highscoresSprites = new SSprite[10];
+            achievementSprites = new SSprite[3];
+
+            loadedHighscores = new int[10];
+            loadedAchievements = new int[3];
+
+            for (int i = 0; i < 10; i++) loadedHighscores[i] = -1;
+            for (int i = 0; i < 3; i++) loadedAchievements[i] = -2;
+
+            string input = "-1";
+            try
+            {
+                StreamReader sr = new StreamReader("sts.txt");
+                for(int i = 0; i < 10; i++)
+                {
+                    input = sr.ReadLine();
+                    int.TryParse(input, out loadedHighscores[i]);
+                }
+
+                for(int i = 0; i < 3; i++)
+                {
+                    input = sr.ReadLine();
+                    int.TryParse(input, out loadedAchievements[i]);
+                }
+                sr.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+
+            for (int i = 0; i < 10; i++) highscoresSprites[i] = new SSprite(i + 1 + ". " + loadedHighscores[i], sfont, new Vector2(50, mHeight * 2 + 10 + i * (sHeight + 10)), Color.Azure);
+            achievementSprites[0] = new SSprite( "Levels Completed: " + loadedAchievements[0], sfont, new Vector2(400, mHeight * 2 + 10 + 0 * (sHeight + 10)), Color.Azure);
+            achievementSprites[1] = new SSprite("Chargers Killed: " + loadedAchievements[1], sfont, new Vector2(400, mHeight * 2 + 10 + 1 * (sHeight + 10)), Color.Azure);
+            achievementSprites[2] = new SSprite("Rangers Killed: " + loadedAchievements[2], sfont, new Vector2(400, mHeight * 2 + 10 + 2 * (sHeight + 10)), Color.Azure);
+
+
+
+
+
+
             //Creates Main Menu
             GSprite[] gs = { new NSprite(new Rectangle(0, 0, WIDTH, HEIGHT), Color.SandyBrown),
                 new NSprite(new Rectangle(0, 0, WIDTH, mHeight * 2), Color.SaddleBrown),
                 new SSprite("Maze Crawler", mfont, new Vector2(25,mHeight / 2), Color.Azure)};
 
             MenuOption[] mo = { new MenuOption(new SSprite("Start Game", sfont, new Vector2(50, mHeight * 2 + sHeight), Color.Azure)),
-                new MenuOption(new SSprite("Settings", sfont, new Vector2(50, mHeight * 2 + sHeight * 3), Color.Azure)),
+                new MenuOption(new SSprite("Highscores and Achievements", sfont, new Vector2(50, mHeight * 2 + sHeight * 3), Color.Azure)),
                 new MenuOption(new SSprite("Quit Game", sfont, new Vector2(50,mHeight * 2 + sHeight * 5), Color.Azure))};
 
             mainMenu = new GGUI(gs, mo, Color.Azure);
 
-
+            
 
             //Creates Pause Menu
             GSprite[] pgs = { new NSprite(new Rectangle(WIDTH / 4, HEIGHT / 8, WIDTH / 2, HEIGHT / 2), Color.SandyBrown),
@@ -142,7 +192,7 @@ namespace Fantastic7
             //Creates Shop Menu
             GSprite[] sgs = { new NSprite(new Rectangle(WIDTH / 4, HEIGHT / 8, WIDTH / 2, HEIGHT *2 / 3 ), Color.SandyBrown),
                 new NSprite(new Rectangle(WIDTH / 4, HEIGHT / 8, WIDTH / 2, mHeight * 2), Color.SaddleBrown),
-                new SSprite("Ye Old Shope", mfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 2, HEIGHT / 8 + mHeight / 2), Color.Azure)};
+                new SSprite("Ye Old Shope", mfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shoppe").X / 2, HEIGHT / 8 + mHeight / 2), Color.Azure)};
 
             MenuOption[] smo = { new MenuOption(new SSprite("Weapon Damage (10C)", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight/2), Color.Azure)),
                 new MenuOption(new SSprite("Max Health (10C)", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Ye Old Shope").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 2), Color.Azure)),
@@ -165,6 +215,20 @@ namespace Fantastic7
 
             deathMenu = new GGUI(dgs, dmo, Color.Azure);
 
+            //Creates Leaderboard plus AH system
+
+            GSprite[] scoregs = new GSprite[16];
+            scoregs[0] = new NSprite(new Rectangle(0, 0, WIDTH, HEIGHT), Color.SandyBrown);
+            scoregs[1] = new NSprite(new Rectangle(0, 0, WIDTH, mHeight * 2), Color.SaddleBrown);
+            scoregs[2] = new SSprite("Highscores and Acheivements", mfont, new Vector2(25,mHeight / 2), Color.Azure);
+            for (int i = 0; i < 10; i++) scoregs[3 + i] = highscoresSprites[i];
+            for (int i = 0; i < 3; i++) scoregs[13 + i] = achievementSprites[i];
+
+            MenuOption[] scoremo = { new MenuOption(new SSprite("Return" , sfont, new Vector2(50,HEIGHT - sHeight*2), Color.Azure))};
+
+            scoreMenu = new GGUI(scoregs, scoremo, Color.Azure);
+
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -185,6 +249,49 @@ namespace Fantastic7
             EventHandler = new EventHandler(currMap);
         }
 
+        public void updateScore(int score)
+        {
+            for(int i = 9; i >= 0; i--)
+            {
+                if(score >= loadedHighscores[i])
+                {
+                    for (int j = 9; j > i; j--)
+                    {
+                        loadedHighscores[j] = loadedHighscores[j - 1];
+                    }
+                    loadedHighscores[i] = score;
+                    break;
+                }
+            }
+
+            for (int i = 0; i < 10; i++) highscoresSprites[i].setText(i + 1 + ". " + loadedHighscores[i]);
+
+            achievementSprites[0].setText("Levels Completed: " + loadedAchievements[0]);
+            achievementSprites[1].setText("Chargers Killed: " + loadedAchievements[1]);
+            achievementSprites[2].setText("Rangers Killed: " + loadedAchievements[2]);
+            
+        }
+
+        public void gameExit()
+        {
+            try
+            {
+                StreamWriter sr = new StreamWriter("sts.txt", false);
+
+                updateScore(0);
+
+                for (int i = 0; i < 10; i++) sr.WriteLine(loadedHighscores[i]);
+                for (int i = 0; i < 3; i++) sr.WriteLine(loadedAchievements[i]);
+                sr.Close();
+
+            }
+            catch(Exception e)
+            {
+
+            }
+            Exit();
+        }
+
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -202,26 +309,54 @@ namespace Fantastic7
 
 
                     MenuControls.update(gameTime);
+                    
 
-                    //Poll inputs
-
-
-
-
-                    //currentTime += gameTime.ElapsedGameTime.Milliseconds;
-                    //if(currentTime >= goalTime) { 
-
-                    if (MenuControls.getExit()) Exit();
-                    if (MenuControls.getSelect()) newGame();
+                    if (MenuControls.getExit()) gameExit();
+                    if (MenuControls.getSelect())
+                    {
+                        switch (mainMenu.getIndex())
+                        {
+                            case 0:
+                                newGame();
+                                break;
+                            case 1:
+                                gs = GameState.leaderboard;
+                                break;
+                            case 2:
+                                gameExit();
+                                break;
+                        }
+                    }
                     if (MenuControls.getNextKey()) mainMenu.nextOption();
                     if (MenuControls.getPrevKey()) mainMenu.previousOption();
                         
-                        //End inputs 
-                        //currentTime -= goalTime;
-                    //}
+                        
+                    break;
+                case GameState.leaderboard:
+
+                    MenuControls.update(gameTime);
+
+                    if (MenuControls.getExit())
+                    {
+                        gs = GameState.mainMenu;
+                        updateScoreMenu = false;
+                    }
+                    if (MenuControls.getSelect())
+                    {
+                        gs = GameState.mainMenu;
+                        updateScoreMenu = false;
+                    }
+
+                    if (!updateScoreMenu)
+                    {
+                        updateScoreMenu = true;
+
+                    }
+
                     break;
                 case GameState.running:
 
+                    if(updateScoreMenu) { updateScoreMenu = false; }
                     PlayControls.update(gameTime);
 
                     //Poll inputs
@@ -275,25 +410,7 @@ namespace Fantastic7
 
                     if (MenuControls.getNextKey()) pauseMenu.nextOption();
                     if (MenuControls.getPrevKey()) pauseMenu.previousOption();
-                    if (MenuControls.getSelect())
-                    {
-                        switch (pauseMenu.getIndex())
-                        {
-                            case 0:
-                                
-                                    gs = GameState.running;
-                                
-                                break;
-
-                            case 1:
-                               
-                                break;
-
-                            case 2:
-                                gs = GameState.mainMenu;
-                                break;
-                        }
-                    }
+                    if (MenuControls.getSelect()) gs = GameState.mainMenu;
                     if (MenuControls.getExit()) gs = GameState.running;
                     //End inputs
                     break;
@@ -340,6 +457,11 @@ namespace Fantastic7
                 case GameState.death:
                     MenuControls.update(gameTime);
 
+                    if (!updateScoreMenu)
+                    {
+                        updateScore(currMap.hud.Score);
+                        updateScoreMenu = true;
+                    }
                     deathMenuScore.setText("Your Score: " + currMap.hud.Score);
 
                     //Poll inputs
@@ -355,7 +477,7 @@ namespace Fantastic7
                                 break;
 
                             case 1:
-                                Exit();
+                                gameExit();
                                 break;
                         }
                     }
@@ -382,6 +504,9 @@ namespace Fantastic7
             {
                 case GameState.mainMenu:
                     mainMenu.draw(spriteBatch,1);
+                    break;
+                case GameState.leaderboard:
+                    scoreMenu.draw(spriteBatch, 1);
                     break;
                 case GameState.paused:
                     pauseMenu.draw(spriteBatch, 1);

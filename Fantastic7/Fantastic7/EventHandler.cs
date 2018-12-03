@@ -202,6 +202,7 @@ namespace Fantastic7
                         {
                             _currmap.hud.Score += 100;
                             _currmap.hud.Level += 1;
+                            Game1.loadedAchievements[0]++;
                             _currmap.GenerateMap();
                         }
                         if (_go[i] is Bullet)
@@ -387,12 +388,14 @@ namespace Fantastic7
                         }
                         if (en is Charger)
                         {
+                            Game1.loadedAchievements[1]++;
                             _currmap.hud.Score += 5;
                             _currmap.hud.Currency += 1;
 
                         }
                         if (en is Ranger)
                         {
+                            Game1.loadedAchievements[2]++;
                             _currmap.hud.Score += 10;
                             _currmap.hud.Currency += 2;
                         }
