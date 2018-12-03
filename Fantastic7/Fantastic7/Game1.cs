@@ -275,7 +275,25 @@ namespace Fantastic7
 
                     if (MenuControls.getNextKey()) pauseMenu.nextOption();
                     if (MenuControls.getPrevKey()) pauseMenu.previousOption();
-                    if (MenuControls.getSelect()) gs = GameState.mainMenu;
+                    if (MenuControls.getSelect())
+                    {
+                        switch (pauseMenu.getIndex())
+                        {
+                            case 0:
+                                
+                                    gs = GameState.running;
+                                
+                                break;
+
+                            case 1:
+                               
+                                break;
+
+                            case 2:
+                                gs = GameState.mainMenu;
+                                break;
+                        }
+                    }
                     if (MenuControls.getExit()) gs = GameState.running;
                     //End inputs
                     break;
