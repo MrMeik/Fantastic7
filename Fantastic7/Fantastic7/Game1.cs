@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Timers;
 using System.IO;
 
@@ -184,8 +185,7 @@ namespace Fantastic7
                 new SSprite("Pause Menu", mfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Pause Menu").X / 2, HEIGHT / 8 + mHeight / 2), Color.Azure)};
 
             MenuOption[] pmo = { new MenuOption(new SSprite("Resume", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Pause Menu").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight/2), Color.Azure)),
-                new MenuOption(new SSprite("Setting", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Pause Menu").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 2), Color.Azure)),
-                new MenuOption(new SSprite("Quit", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Pause Menu").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 3.5f), Color.Azure))};
+                new MenuOption(new SSprite("Quit", sfont, new Vector2(WIDTH / 2 - mfont.MeasureString("Pause Menu").X / 4, HEIGHT / 8 + mHeight * 2 + sHeight * 2), Color.Azure))};
 
             pauseMenu = new GGUI(pgs, pmo, Color.Azure);
 
@@ -251,18 +251,12 @@ namespace Fantastic7
 
         public void updateScore(int score)
         {
-            for(int i = 9; i >= 0; i--)
-            {
-                if(score >= loadedHighscores[i])
-                {
-                    for (int j = 9; j > i; j--)
-                    {
-                        loadedHighscores[j] = loadedHighscores[j - 1];
-                    }
-                    loadedHighscores[i] = score;
-                    break;
-                }
-            }
+            List<int> hs = new List<int>(loadedHighscores);
+            hs.Add(score);
+            hs.Sort();
+            hs.Reverse();
+            hs.RemoveAt(10);
+            loadedHighscores = hs.ToArray();
 
             for (int i = 0; i < 10; i++) highscoresSprites[i].setText(i + 1 + ". " + loadedHighscores[i]);
 
@@ -410,7 +404,20 @@ namespace Fantastic7
 
                     if (MenuControls.getNextKey()) pauseMenu.nextOption();
                     if (MenuControls.getPrevKey()) pauseMenu.previousOption();
-                    if (MenuControls.getSelect()) gs = GameState.mainMenu;
+                    if (MenuControls.getSelect())
+                    {
+                        switch (pauseMenu.getIndex())
+                        {
+                            case 0:
+                                gs = GameState.running;
+                                break;
+                            case 1:
+                                updateScore(currMap.hud.Score);
+                                gs = GameState.mainMenu;
+                                break;
+                        }
+                    }
+                    
                     if (MenuControls.getExit()) gs = GameState.running;
                     //End inputs
                     break;
